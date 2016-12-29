@@ -235,31 +235,63 @@
 		            
 		              
 		                box1.style.display = "none";
-		                box2.addEventListener("touchstart",function(evt){
-		                	var oEvent = evt || window.event;
-								//计算出鼠标点击时距离div左边界合上边界的距离
-								var divX = oEvent.clientX-box2.offsetLeft;						
-								//在document对象上添加一个onmousemove事件
-								document.addEventListener("touchmove",function(evt){
-								    var oEvent = evt || window.event;
-								    var boxX = oEvent.clientX-divX;
-								    console.log(oEvent.clientX+","+divX);
-								    box2.style.left=boxX+"px";
-								    if(oEvent.clientX-divX<=0){
-								    	 box2.style.left=0+"px";
-								    }
-								    if(oEvent.clientX-divX>=230){
-								    	 box2.style.left=230+"px";
-								    }
-								});
-								//取消事件
-								document.addEventListener("onmouseup",function(evt){
-									document.touchmove = null;
-									document.onmouseup = null;
-								});
-		                }) ;
-									
-							
+//		                box2.onmousedown = function(evt){
+//								var oEvent = evt || window.event;
+//								//计算出鼠标点击时距离div左边界合上边界的距离
+//								var divX = oEvent.clientX-box2.offsetLeft;						
+//								//在document对象上添加一个onmousemove事件
+//								document.onmousemove = function(evt){
+//								    var oEvent = evt || window.event;
+//								    var boxX = oEvent.clientX-divX;
+//								    console.log(oEvent.clientX+","+divX);
+//								    box2.style.left=boxX+"px";
+//								    if(oEvent.clientX-divX<=0){
+//								    	 box2.style.left=0+"px";
+//								    }
+//								    if(oEvent.clientX-divX>=230){
+//								    	 box2.style.left=230+"px";
+//								    }
+//								}
+//								//取消事件
+//								document.onmouseup=function(){
+//									document.onmousemove = null;
+//									document.onmouseup = null;
+//								}	
+//							}
+
+  var oW;
+  // 绑定touchstart事件
+  box2.addEventListener("touchstart", function(e) {
+   console.log(e);
+   var touches = e.touches[0];
+   oW = touches.clientX - box2.offsetLeft;
+
+   //阻止页面的滑动默认事件
+   document.addEventListener("touchmove",defaultEvent,false);
+  },false)
+ 
+  box2.addEventListener("touchmove", function(e) {
+   var touches = e.touches[0];
+   var oLeft = touches.clientX - oW;
+   
+   if(oLeft < 0) {
+    oLeft = 0;
+   }else if(oLeft > document.documentElement.clientWidth -box2.offsetWidth) {
+    oLeft = (document.documentElement.clientWidth - box2.offsetWidth);
+   }
+   box2.style.left = oLeft + "px";
+   
+  },false);
+   
+  box2.addEventListener("touchend",function() {
+   document.removeEventListener("touchmove",defaultEvent,false);
+  },false);
+  function defaultEvent(e) {
+   e.preventDefault();
+  }
+
+
+
 		        }
 		          
 		     })
