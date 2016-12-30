@@ -11,7 +11,7 @@
 			  padding: 0;
 		      width: 100%;
 		      height: 100%;
-		      border: solid 1px black;
+		     
 		      background: url(img/1.jpg) no-repeat ;
 		      overflow: hidden;
 		    
@@ -20,27 +20,53 @@
 		      width: 100px;
 		      height: 40px;
 		      line-height: 40px;
+		      opacity: 1;
+		      transition: all 3s;
 		      text-align: center;
 		      color: white;
 		      background: black;
 		      position: absolute;
-		      top: 230px;
-		      left: 100px;
+		      
 		  }
+		
 		  #box2{
 		      width: 70px;
 		      height: 50px;
 		      border: solid 1px black;
 		      background-color: goldenrod;
+		      transition: opacity 2s;
+		      opacity: 0;
 		      position: absolute;
 		      bottom: 0px;
-		      left: 115px;
+		      
 		  }
 		  .gift{
 		  	  width: 70px;
 		      height: 50px;
 		      border: solid 1px black;
 		      background: url(img/2.gif);
+		      background-color: goldenrod;
+		      position: absolute;
+		      top: 0px;
+		      
+		  }
+		  .gift2{
+		  	  width: 70px;
+		      height: 50px;
+		      border: solid 1px black;
+		      background: url(img/4.jpg);
+		      background-size: cover;
+		      background-color: goldenrod;
+		      position: absolute;
+		      top: 0px;
+		      
+		  }
+		  .gift3{
+		  	  width: 70px;
+		      height: 50px;
+		      border: solid 1px black;
+		      background: url(img/5.jpg);
+		      background-size: cover;
 		      background-color: goldenrod;
 		      position: absolute;
 		      top: 0px;
@@ -61,17 +87,15 @@
 		  
 		  }
 		  #box5{
-		  	width: 300px;
-		  	height: 500px;
+		  	width: 100%;
+		  	height: 100%;
 		    position: absolute;
 		    left: 0px;
 		    top: 0px;
 		    display: none;
+		    transition: all 3s;
 		  }
-		  #box5 img{
-		  	width: 300px;
-		  	height: 500px;
-		  }
+	
 		  #box6{
 		      width: 100px;
 		      height: 40px;
@@ -81,12 +105,18 @@
 		      background: black;
 		      display: none;
 		      position: absolute;
-		      top: 230px;
-		      left: 100px;
+		      transition: all 3s;
+		
 		  }
 		</style>
 		<script>
-		      sum =0;
+		      //开始游戏,游戏结束，重新开始游戏
+		      //我的购物车
+		      //我的礼品
+		      //计算得分
+		      //计算时间
+		      //礼品与购物车之间的碰撞检测
+		     var sum =0;
 		      i=60;
 		     document.addEventListener("DOMContentLoaded",function(){
 		          var box1 = document.querySelector("#box1");
@@ -95,14 +125,26 @@
 		          var box6 = document.querySelector("#box6");
 		          var score = document.querySelector(".score");
 		          var otime = document.querySelector(".otime");
+		          var oimg = document.querySelector(".oimg");
+		          
 		          //可见区域高度
 		          var oheight = box2.offsetTop;	  
+		          //屏幕宽度
 		          var owidth = document.body.offsetWidth; 
+		          //初始化位置
+		          oimg.style.width = owidth+"px";
+		          oimg.style.height = oheight+60+"px";
+		          box1.style.top = parseInt(oheight/2)+"px";
+		          box1.style.left = parseInt(owidth/2-50)+"px";
+		          box2.style.left = parseInt(owidth/2-35)+"px";
+		          box6.style.top = parseInt(oheight/2)+"px";
+		          box6.style.left = parseInt(owidth/2-50)+"px";
 		          console.log(oheight);
 		          console.log(owidth);
 		          //开始游戏
 		          box1.onclick = function(){  	
-		             	
+		          	    box1.style.opacity = 0;
+		             	box2.style.opacity = 1;
 		                run();
 		          }
 		             //重新开始游戏
@@ -111,12 +153,34 @@
 			            sum =0;
 				        otime.innerHTML = i;
 				        score.innerHTML = sum;
+				        box2.style.opacity = 1;
 				        box6.style.display = "none";
 		             	run();
 		             }
 		          console.log(box1.offsetLeft+","+box1.offsetTop);
-		          
+		          //礼物1匀速运动
 		          function startMove(obj,attr,iTarget){
+					//清除之前运动定时器
+					clearInterval(obj.timer);
+					//开启定时器，开始运动
+					obj.timer = setInterval(function(){
+						//获取初始位置
+						var current = parseInt(getStyleAttr(obj,attr));
+					//	console.log(current);
+						//设置一个速度
+						var iSpeed = current < iTarget ? 2 : -2;
+			//			console.log(iSpeed);
+						//当到目标位置时，关闭定时器，停止运动
+						if(current == iTarget){
+							clearInterval(obj.timer);  //关闭定时器
+							return;  //跳出函数  不执行下面的代码
+						}						
+						//运动	current + iSpeed	
+						obj.style[attr] = current + iSpeed + "px";					
+					},10)
+				}
+		          //礼物2匀速运动
+		          function startMove2(obj,attr,iTarget){
 					//清除之前运动定时器
 					clearInterval(obj.timer);
 					//开启定时器，开始运动
@@ -134,12 +198,34 @@
 						}						
 						//运动	current + iSpeed	
 						obj.style[attr] = current + iSpeed + "px";					
-					},1)
+					},8)
+				}
+		          //礼物3匀速运动
+		          function startMove3(obj,attr,iTarget){
+					//清除之前运动定时器
+					clearInterval(obj.timer);
+					//开启定时器，开始运动
+					obj.timer = setInterval(function(){
+						//获取初始位置
+						var current = parseInt(getStyleAttr(obj,attr));
+					//	console.log(current);
+						//设置一个速度
+						var iSpeed = current < iTarget ? 1 : -1;
+			//			console.log(iSpeed);
+						//当到目标位置时，关闭定时器，停止运动
+						if(current == iTarget){
+							clearInterval(obj.timer);  //关闭定时器
+							return;  //跳出函数  不执行下面的代码
+						}						
+						//运动	current + iSpeed	
+						obj.style[attr] = current + iSpeed + "px";					
+					},5)
 				}
 			//current 200+5 205  、205+5 210
 			//获取元素的属性值
 			//obj  元素对象
 			//attr 要获取的元素属性
+			//兼容写法
 			function getStyleAttr(obj,attr){
 				if(window.getComputedStyle){  //ie9+  ff 谷歌
 					return getComputedStyle(obj,null)[attr];			
@@ -147,7 +233,7 @@
 				//ie8及以下
 				return obj.currentStyle[attr];
 			}
-		          
+		          //创建一个对象
 		          function Person(){
 		          	
 		          }
@@ -165,10 +251,17 @@
 		          		if(i==2){
 		          			clearInterval(time1);
 		          		}
+		          		if(i==12){
+		          			clearInterval(time3);
+		          		}
+		          		if(i==7){
+		          			clearInterval(time4);
+		          		}
 		          		if(i<=0){
 		          			
 		          			
 		          			clearInterval(time2);
+		          			box2.style.opacity = 0;
 		          			box5.style.display = "block";
 		          			setTimeout(function(){
 		          				box5.style.display = "none";
@@ -179,6 +272,7 @@
 		          			},6000);
 		          		}
 		          }
+		          //创建礼物1
 		          Person.prototype.show = function(){
 		          	var gift1 = document.createElement("div");
 		          	
@@ -201,21 +295,20 @@
 		          		var gwc2 = box2.offsetLeft+70;
 	//	          		console.log(wz);
 		          		//得分
-		          		
-		          		
-		          		
-		          		if(wz == (oheight-50)){
+	
+		          		if(wz == (oheight-51) || wz == (oheight-50) || wz == (oheight-49)){
 		          			if(gwc>=zbk && gwc<=ybk){
 		          				document.body.removeChild(gift1);
 		          			//	gift1.style.display = "none";
 		          				sum+=5;	
-		          				score.innerHTML = sum;
+		          				
 		          			}
 		          			if(gwc2>=zbk && gwc2<=ybk){
 		          				document.body.removeChild(gift1);
 		          				sum+=5;	          	
-		          				score.innerHTML = sum;
+		          				
 		          			}
+		          			score.innerHTML = sum;
 		          		}
 		          		if(wz>=oheight){
 		          			document.body.removeChild(gift1);
@@ -224,6 +317,94 @@
 		          	},1)
 		          	
 		          }
+		          
+		          //创建礼物2
+		          Person.prototype.show2 = function(){
+		          	var gift2 = document.createElement("div");	
+		          	gift2.className = "gift2";
+		          	document.body.appendChild(gift2);
+		          	gift2.style.left = parseInt(Math.random()*(owidth-70))+"px";
+		          	startMove2(gift2,"top",oheight);
+		          	//碰撞检测
+		          	setInterval(function(){
+	//	          		console.log(gift1.offsetLeft+","+gift1.offsetTop);
+		          		//礼物的左边框
+		          		var zbk2 = gift2.offsetLeft;
+		          		//礼物的右边框
+		          		var ybk2 = gift2.offsetLeft+70;
+		          		//礼物的位置的纵坐标
+		          		var wz2 = gift2.offsetTop;
+		          		//购物车的右边框
+		          		var gwc = box2.offsetLeft;
+		          		//购物车的左边框
+		          		var gwc2 = box2.offsetLeft+70;
+	//	          		console.log(wz);
+		          		//得分
+		          		if(wz2 == (oheight-51) || wz2 == (oheight-50) || wz2 == (oheight-49)){
+		          			if(gwc>=zbk2 && gwc<=ybk2){
+		          				document.body.removeChild(gift2);
+		          			//	gift1.style.display = "none";
+		          				sum+=10;	
+		          				
+		          			}
+		          			if(gwc2>=zbk2 && gwc2<=ybk2){
+		          				document.body.removeChild(gift2);
+		          				sum+=10;	          	
+		          				
+		          			}
+		          			score.innerHTML = sum;
+		          		}
+		          		if(wz2>=oheight){
+		          			document.body.removeChild(gift2);
+		          		}
+		          		 
+		          	},1)
+		          	
+		          }
+		          //创建礼物3
+		          Person.prototype.show3 = function(){
+		          	var gift3 = document.createElement("div");	
+		          	gift3.className = "gift3";
+		          	document.body.appendChild(gift3);
+		          	gift3.style.left = parseInt(Math.random()*(owidth-70))+"px";
+		          	startMove3(gift3,"top",oheight);
+		          	//碰撞检测
+		          	setInterval(function(){
+	//	          		console.log(gift1.offsetLeft+","+gift1.offsetTop);
+		          		//礼物的左边框
+		          		var zbk3 = gift3.offsetLeft;
+		          		//礼物的右边框
+		          		var ybk3 = gift3.offsetLeft+70;
+		          		//礼物的位置的纵坐标
+		          		var wz3 = gift3.offsetTop;
+		          		//购物车的右边框
+		          		var gwc = box3.offsetLeft;
+		          		//购物车的左边框
+		          		var gwc2 = box3.offsetLeft+70;
+	//	          		console.log(wz);
+		          		//得分
+		          		if( wz3 == (oheight-52) || wz3 == (oheight-51) || wz3 == (oheight-50) || wz3 == (oheight-49)|| wz3 == (oheight-48)){
+		          			if(gwc>=zbk3 && gwc<=ybk3){
+		          				document.body.removeChild(gift3);
+		          			//	gift1.style.display = "none";
+		          				sum+=8;	
+		          				
+		          			}
+		          			if(gwc2>=zbk3 && gwc2<=ybk3){
+		          				document.body.removeChild(gift3);
+		          				sum+=8;	          	
+		          				
+		          			}
+		          			score.innerHTML = sum;
+		          		}
+		          		if(wz3>=oheight){
+		          			document.body.removeChild(gift3);
+		          		}
+		          		 
+		          	},1)
+		          	
+		          }
+		          //对象实例化
 		          var person = new Person();
 		           
 		        function run(){
@@ -235,9 +416,19 @@
 		             		 person.show();
 		             		 
 		             	},2000)
-		            
-		              
-		                box1.style.display = "none";
+		                time3 = setInterval(function(){
+		                	setTimeout(function(){
+		                		 person.show2();
+		                	},2000)
+		             		
+		             		 
+		             	},10000)
+		                time4 = setInterval(function(){
+		                
+		                		 person.show3();
+ 
+		             	},7000)
+		                
 //		                box2.onmousedown = function(evt){
 //								var oEvent = evt || window.event;
 //								//计算出鼠标点击时距离div左边界合上边界的距离
@@ -309,7 +500,7 @@
 		<div id="box3">分数：<span class="score">0</span></div>
 		<div id="box4">时间：<span class="otime">60</span></div>
 		<div id="box5">
-			<img src="img/3.jpg"/>
+			<img class="oimg" src="img/3.jpg"/>
 		</div>
 		<div id="box6">重新开始</div>
 	</body>
