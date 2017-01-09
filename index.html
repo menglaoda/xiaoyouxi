@@ -9,12 +9,7 @@
 		  body{
 			  margin: 0;
 			  padding: 0;
-		      width: 100%;
-		      height: 100%;
-		     
-		      background: url(img/1.jpg) no-repeat ;
-		      overflow: hidden;
-		    
+			     background: #22252c; 
 		  }
 		  #box1{
 		      width: 100px;
@@ -32,7 +27,7 @@
 		  #box2{
 		      width: 70px;
 		      height: 50px;
-		      border: solid 1px black;
+		      
 		      background-color: goldenrod;
 		      transition: opacity 2s;
 		      opacity: 0;
@@ -40,10 +35,11 @@
 		      bottom: 0px;
 		      
 		  }
+		  #box2 img{width: 70px;height: 50px;}
 		  .gift{
 		  	  width: 70px;
 		      height: 50px;
-		      border: solid 1px black;
+		     
 		      background: url(img/2.gif);
 		      background-color: goldenrod;
 		      position: absolute;
@@ -54,7 +50,7 @@
 		  	  width: 70px;
 		      height: 50px;
 		      border: solid 1px black;
-		      background: url(img/4.jpg);
+		      background: url(img/wy2.jpg);
 		      background-size: cover;
 		      background-color: goldenrod;
 		      position: absolute;
@@ -65,26 +61,35 @@
 		  	  width: 70px;
 		      height: 50px;
 		      border: solid 1px black;
+		      
 		      background: url(img/5.jpg);
 		      background-size: cover;
 		      background-color: goldenrod;
 		      position: absolute;
 		      top: 0px;
+		     
 		      
 		  }
 		  #box3{
-		  	width: 80px;
-		  	height: 30px;
-		  	line-height: 30px;
+		  	width: 50%;
+		  	height: 50px;
+		  	line-height: 50px;
+		  	text-align: center;
+		  	color: white;
 		  	position: absolute;
-		  	left: 220px;
+		  	left: 0px;
+		  	 background: #22252c;
+		  	 border: none;
 		  }
 		  #box4{
-		  	width: 80px;
-		  	height: 30px;
-		  	line-height: 30px;
-		  	margin-left: 100px;
-		  
+		  	width: 50%;
+		  	height: 50px;
+		  	text-align: center;
+		  	color: white;
+		  	line-height: 50px;
+		  	margin-left: 50%;
+		     background: #22252c;
+		     border: none;
 		  }
 		  #box5{
 		  	width: 100%;
@@ -108,6 +113,9 @@
 		      transition: all 3s;
 		
 		  }
+		  .boxwy{width: 100%;position: absolute;top: 50px;left: 0px;border: none;z-index: -1;}
+		  .ai{width: 150px;height: 30px;color: red;background: blanchedalmond;
+		   position: fixed;top: 50%;left: 100%;transition:all 10s;opacity:0;}
 		</style>
 		<script>
 		      //开始游戏,游戏结束，重新开始游戏
@@ -126,11 +134,13 @@
 		          var score = document.querySelector(".score");
 		          var otime = document.querySelector(".otime");
 		          var oimg = document.querySelector(".oimg");
-		          
+		          var wy = document.querySelector(".wy");
 		          //可见区域高度
 		          var oheight = box2.offsetTop;	  
 		          //屏幕宽度
 		          var owidth = document.body.offsetWidth; 
+		          wy.style.width = owidth+"px";
+		          wy.style.height = oheight+"px";
 		          //初始化位置
 		          oimg.style.width = owidth+"px";
 		          oimg.style.height = oheight+60+"px";
@@ -242,7 +252,7 @@
 		          	//每秒减1
 		          		i-=1;
 		          		otime.innerHTML=i ;
-		          		 otime.style.color = "black";
+		          		 otime.style.color = "white";
 		          		//当剩余10秒时，字体变红
 		          		if(i<=10){
 		          		   otime.style.color = "red";
@@ -254,9 +264,9 @@
 		          		if(i==12){
 		          			clearInterval(time3);
 		          		}
-		          		if(i==7){
-		          			clearInterval(time4);
-		          		}
+//		          		if(i==7){
+//		          			clearInterval(time4);
+//		          		}
 		          		if(i<=0){
 		          			
 		          			
@@ -321,6 +331,8 @@
 		          //创建礼物2
 		          Person.prototype.show2 = function(){
 		          	var gift2 = document.createElement("div");	
+		          	var ai  = document.querySelector(".ai");
+		          	
 		          	gift2.className = "gift2";
 		          	document.body.appendChild(gift2);
 		          	gift2.style.left = parseInt(Math.random()*(owidth-70))+"px";
@@ -344,7 +356,9 @@
 		          			if(gwc>=zbk2 && gwc<=ybk2){
 		          				document.body.removeChild(gift2);
 		          			//	gift1.style.display = "none";
-		          				sum+=10;	
+		          				sum+=10;
+		          				ai.style.left = -150+"px";
+		          				ai.style.opacity = 1;
 		          				
 		          			}
 		          			if(gwc2>=zbk2 && gwc2<=ybk2){
@@ -362,48 +376,48 @@
 		          	
 		          }
 		          //创建礼物3
-		          Person.prototype.show3 = function(){
-		          	var gift3 = document.createElement("div");	
-		          	gift3.className = "gift3";
-		          	document.body.appendChild(gift3);
-		          	gift3.style.left = parseInt(Math.random()*(owidth-70))+"px";
-		          	startMove3(gift3,"top",oheight);
-		          	//碰撞检测
-		          	setInterval(function(){
-	//	          		console.log(gift1.offsetLeft+","+gift1.offsetTop);
-		          		//礼物的左边框
-		          		var zbk3 = gift3.offsetLeft;
-		          		//礼物的右边框
-		          		var ybk3 = gift3.offsetLeft+70;
-		          		//礼物的位置的纵坐标
-		          		var wz3 = gift3.offsetTop;
-		          		//购物车的右边框
-		          		var gwc = box3.offsetLeft;
-		          		//购物车的左边框
-		          		var gwc2 = box3.offsetLeft+70;
-	//	          		console.log(wz);
-		          		//得分
-		          		if( wz3 == (oheight-52) || wz3 == (oheight-51) || wz3 == (oheight-50) || wz3 == (oheight-49)|| wz3 == (oheight-48)){
-		          			if(gwc>=zbk3 && gwc<=ybk3){
-		          				document.body.removeChild(gift3);
-		          			//	gift1.style.display = "none";
-		          				sum+=8;	
-		          				
-		          			}
-		          			if(gwc2>=zbk3 && gwc2<=ybk3){
-		          				document.body.removeChild(gift3);
-		          				sum+=8;	          	
-		          				
-		          			}
-		          			score.innerHTML = sum;
-		          		}
-		          		if(wz3>=oheight){
-		          			document.body.removeChild(gift3);
-		          		}
-		          		 
-		          	},1)
-		          	
-		          }
+//		          Person.prototype.show3 = function(){
+//		          	var gift3 = document.createElement("div");	
+//		          	gift3.className = "gift3";
+//		          	document.body.appendChild(gift3);
+//		          	gift3.style.left = parseInt(Math.random()*(owidth-70))+"px";
+//		          	startMove3(gift3,"top",oheight);
+//		          	//碰撞检测
+//		          	setInterval(function(){
+//	//	          		console.log(gift1.offsetLeft+","+gift1.offsetTop);
+//		          		//礼物的左边框
+//		          		var zbk3 = gift3.offsetLeft;
+//		          		//礼物的右边框
+//		          		var ybk3 = gift3.offsetLeft+70;
+//		          		//礼物的位置的纵坐标
+//		          		var wz3 = gift3.offsetTop;
+//		          		//购物车的右边框
+//		          		var gwc = box3.offsetLeft;
+//		          		//购物车的左边框
+//		          		var gwc2 = box3.offsetLeft+70;
+//	//	          		console.log(wz);
+//		          		//得分
+//		          		if( wz3 == (oheight-52) || wz3 == (oheight-51) || wz3 == (oheight-50) || wz3 == (oheight-49)|| wz3 == (oheight-48)){
+//		          			if(gwc>=zbk3 && gwc<=ybk3){
+//		          				document.body.removeChild(gift3);
+//		          			//	gift1.style.display = "none";
+//		          				sum+=8;	
+//		          				
+//		          			}
+//		          			if(gwc2>=zbk3 && gwc2<=ybk3){
+//		          				document.body.removeChild(gift3);
+//		          				sum+=8;	          	
+//		          				
+//		          			}
+//		          			score.innerHTML = sum;
+//		          		}
+//		          		if(wz3>=oheight){
+//		          			document.body.removeChild(gift3);
+//		          		}
+//		          		 
+//		          	},1)
+//		          	
+//		          }
 		          //对象实例化
 		          var person = new Person();
 		           
@@ -423,11 +437,11 @@
 		             		
 		             		 
 		             	},10000)
-		                time4 = setInterval(function(){
-		                
-		                		 person.show3();
- 
-		             	},7000)
+//		                time4 = setInterval(function(){
+//		                
+//		                		 person.show3();
+// 
+//		             	},7000)
 		                
 //		                box2.onmousedown = function(evt){
 //								var oEvent = evt || window.event;
@@ -495,7 +509,7 @@
 	<body>
 		<div id="box1">开始游戏</div>
 		<div id="box2">
-		  <img src="img/2.gif" />
+		  <img src="img/aa.jpg" />
 		</div>
 		<div id="box3">分数：<span class="score">0</span></div>
 		<div id="box4">时间：<span class="otime">60</span></div>
@@ -503,5 +517,9 @@
 			<img class="oimg" src="img/3.jpg"/>
 		</div>
 		<div id="box6">重新开始</div>
+		<div class="boxwy">
+			<img class="wy" src="img/wy.jpg" />
+		</div>
+		<div class="ai">蒙世裕爱韦音!!</div>
 	</body>
 </html>
